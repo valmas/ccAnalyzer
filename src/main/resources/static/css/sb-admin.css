@@ -373,3 +373,15 @@ body.sidebar-toggled footer.sticky-footer {
     width: calc(100% - 90px);
   }
 }
+
+.decrease{
+  color: darkred;
+}
+
+.increase{
+  color: darkgreen;
+}
+
+.stable {
+  color: #343a40;
+}

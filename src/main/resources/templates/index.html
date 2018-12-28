@@ -89,8 +89,21 @@
 
           <div class="card mb-3">
             <div class="card-header">
-              <i class="fas fa-chart-area"></i>
-              Current Price: <span style="font-weight: bold" id="currentPrice"></span></div>
+              <div class="row">
+                <div class="col">
+                  <i class="fas fa-chart-area"></i>
+                  Current Price: <span style="font-weight: bold" id="currentPrice"></span>
+                </div>
+                <div style="text-align: right" class="col">
+                  <span>Refresh rate:</span>
+                  <select id="selectInterval">
+                    <option value="1000">1 sec</option>
+                    <option value="5000">5 sec</option>
+                    <option value="10000">10 sec</option>
+                  </select>
+                </div>
+              </div>
+            </div>
             <div class="card-body">
               <canvas id="myAreaChart" width="100%" height="30"></canvas>
             </div>
@@ -236,16 +249,20 @@
 
     <script th:inline="javascript">
 
+      var preValue;
+      var intervalId;
+
       $(document).ready(function() {
         $('#dataTable').DataTable();
+
+        startInterval(1000);
       });
 
-      $(document).ready(function () {
-        setInterval(function(){
+      function startInterval(_interval) {
+        intervalId = setInterval(function(){
           update('/currentPrice')
-        }, 1000);
-
-      });
+        }, _interval);
+      }
 
       function update(url, fragmentId) {
         $.ajax({
@@ -253,21 +270,46 @@
           type: 'GET',
           success: function (result) {
             console.log(result);
-            $('#currentPrice').html(result);
-
-            var date = new Date().toLocaleTimeString();
-            myLineChart.data.labels.push("");
-            myLineChart.data.datasets.forEach(function (dataset) {
-              dataset.data.push(result);
-            });
-            if(myLineChart.data.labels.length > 50) {
-              myLineChart.data.labels.splice(0, 1);
-              myLineChart.data.datasets[0].data.splice(0, 1);
-            }
-            myLineChart.update();
+            updateLabel(result)
+            updateChart(result);
           }
         });
       }
+
+      function updateLabel(value){
+        var label = $('#currentPrice');
+        label.removeAttr('class');
+
+        if(preValue > value) {
+          label.addClass('decrease');
+        } else if(preValue < value) {
+          label.addClass('increase');
+        }else {
+          label.addClass('stable');
+        }
+        $('#currentPrice').html(value);
+
+        preValue = value;
+      }
+
+      function updateChart(value){
+        myLineChart.data.labels.push("");
+        myLineChart.data.datasets.forEach(function (dataset) {
+          dataset.data.push(value);
+        });
+        if(myLineChart.data.labels.length > 50) {
+          myLineChart.data.labels.splice(0, 1);
+          myLineChart.data.datasets[0].data.splice(0, 1);
+        }
+        myLineChart.update();
+      }
+
+      $('#selectInterval').on('change', function(value) {
+        // clear the existing interval
+        clearInterval(intervalId);
+        // just start a new one
+        startInterval($(this).val());
+      })
     </script>
   </body>
 

@@ -4,7 +4,6 @@ import com.ccAnalyzer.rest.CryptoCurrencyTimeResponse.CryptoCurrencyData;
 import io.vavr.Function2;
 import io.vavr.Tuple;
 import io.vavr.collection.HashMap;
-import io.vavr.collection.Map;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
 import lombok.NonNull;
