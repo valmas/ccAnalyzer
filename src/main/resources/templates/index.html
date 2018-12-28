@@ -1,14 +1,220 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Getting Started: Serving Web Content</title>
+
+  <head>
+    <title>Home</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <title>SB Admin - Dashboard</title>
 
     <link rel="stylesheet"
           type="text/css"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
           th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
 
+    <!-- Custom styles for this template-->
+    <link rel="stylesheet"
+          type="text/css"
+          th:href="@{/css/dataTables.bootstrap4.css}" />
+    <link rel="stylesheet"
+          type="text/css"
+          href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+          th:href="@{/webjars/font-awesome/css/all.css}" />
+    <link rel="stylesheet"
+          type="text/css"
+          th:href="@{/css/sb-admin.css}" />
+
+  </head>
+
+  <body id="page-top">
+
+    <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
+
+      <a class="navbar-brand mr-1" th:href="@{/}">Crypto Currency Analyzer</a>
+
+      <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
+        <i class="fas fa-bars"></i>
+      </button>
+    </nav>
+
+    <div id="wrapper">
+
+      <!-- Sidebar -->
+      <ul class="sidebar navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" th:href="@{/}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-fw fa-folder"></i>
+            <span>Pages</span>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+            <h6 class="dropdown-header">Login Screens:</h6>
+            <a class="dropdown-item" href="login.html">Login</a>
+            <a class="dropdown-item" href="register.html">Register</a>
+            <a class="dropdown-item" href="forgot-password.html">Forgot Password</a>
+            <div class="dropdown-divider"></div>
+            <h6 class="dropdown-header">Other Pages:</h6>
+            <a class="dropdown-item" href="404.html">404 Page</a>
+            <a class="dropdown-item" href="blank.html">Blank Page</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="charts.html">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>Charts</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="tables.html">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Tables</span></a>
+        </li>
+      </ul>
+
+      <div id="content-wrapper">
+
+        <div class="container-fluid">
+
+          <!-- Breadcrumbs-->
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="#">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">Overview</li>
+          </ol>
+
+          <div class="card mb-3">
+            <div class="card-header">
+              <i class="fas fa-chart-area"></i>
+              Current Price: <span style="font-weight: bold" id="currentPrice"></span></div>
+            <div class="card-body">
+              <canvas id="myAreaChart" width="100%" height="30"></canvas>
+            </div>
+          </div>
+
+          <!-- Area Chart Example-->
+          <div class="card mb-3">
+            <div class="card-header">
+              <i class="fas fa-search"></i>
+              Search History</div>
+            <div class="card-body">
+              <div class="col-12">
+                <div class="row">
+                  <div class="col-6">
+                    <form th:action="@{/historyByDate}" method="get">
+                      <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                          <div class="form-group">
+                            <label class="control-label">Time from</label>
+                            <input class="form-control form-control-sm" type="date" name="dateFrom">
+                          </div>
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                          <div class="form-group">
+                            <label class="control-label">Time To</label>
+                            <input class="form-control form-control-sm" type="date" name="dateTo">
+                          </div>
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                          <div class="form-group">
+                            <label class="control-label">Accuracy</label>
+                            <select name="accuracy" class="form-control form-control-sm">
+                              <option value="DAYS">Days</option>
+                              <option value="HOURS">Hours</option>
+                              <option value="MINUTES">Minutes</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <input type="submit" value="Search">
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- DataTables Example -->
+          <div class="card mb-3" th:unless="${#lists.isEmpty(data)}">
+            <div class="card-header">
+              <i class="fas fa-table"></i>
+              Data Table</div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                  <tr>
+                    <th>A/A</th>
+                    <th>Open</th>
+                    <th>High</th>
+                    <th>Low</th>
+                    <th>Close</th>
+                    <th>Date</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr th:each="d, it : ${data}">
+                    <td th:text="${it.count}">IE015</td>
+                    <td th:text="${d.open}">IE015</td>
+                    <td th:text="${d.high}">IE015</td>
+                    <td th:text="${d.low}">IE015</td>
+                    <td th:text="${d.close}">IE015</td>
+                    <td th:text="${d.time}">10/10/2017</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- /.container-fluid -->
+
+        <!-- Sticky Footer -->
+        <footer class="sticky-footer">
+          <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+              <span>Copyright © Your Website 2018</span>
+            </div>
+          </div>
+        </footer>
+
+      </div>
+      <!-- /.content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="login.html">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
     <script type="text/javascript"
             src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
             th:src="@{/webjars/jquery/jquery.min.js}"></script>
@@ -19,95 +225,50 @@
             src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
             th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 
+    <script type="text/javascript" th:src="@{/js/jquery.easing.js}"></script>
+    <script type="text/javascript" th:src="@{/js/Chart.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery.dataTables.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.bootstrap4.js}"></script>
+    <script type="text/javascript" th:src="@{/js/sb-admin.js}"></script>
+
+    <!-- Demo scripts for this page-->
+    <script type="text/javascript" th:src="@{/js/chart-area-demo.js}"></script>
+
     <script th:inline="javascript">
-        $(document).ready(function () {
-            setInterval(function(){
-                   update('/currentPrice')
-               }, 1000);
 
-        });
+      $(document).ready(function() {
+        $('#dataTable').DataTable();
+      });
 
-        function update(url, fragmentId) {
-            $.ajax({
-                url: url,
-                type: 'GET',
-                success: function (result) {
-                    console.log(result);
-                    $('#currentPrice').html(result);
-                }
+      $(document).ready(function () {
+        setInterval(function(){
+          update('/currentPrice')
+        }, 1000);
+
+      });
+
+      function update(url, fragmentId) {
+        $.ajax({
+          url: url,
+          type: 'GET',
+          success: function (result) {
+            console.log(result);
+            $('#currentPrice').html(result);
+
+            var date = new Date().toLocaleTimeString();
+            myLineChart.data.labels.push("");
+            myLineChart.data.datasets.forEach(function (dataset) {
+              dataset.data.push(result);
             });
-        }
+            if(myLineChart.data.labels.length > 50) {
+              myLineChart.data.labels.splice(0, 1);
+              myLineChart.data.datasets[0].data.splice(0, 1);
+            }
+            myLineChart.update();
+          }
+        });
+      }
     </script>
-</head>
-<body>
-<h2>History Per Day</h2>
-<div class="">
-    <div class="col-12">
-        <div class="row">
-            <div class="col-6">
-                <form th:action="@{/historyByDate}" method="get">
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                            <div class="form-group">
-                                <label class="control-label">Time from</label>
-                                <input class="form-control form-control-sm" type="date" name="dateFrom">
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                            <div class="form-group">
-                                <label class="control-label">Time To</label>
-                                <input class="form-control form-control-sm" type="date" name="dateTo">
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                            <div class="form-group">
-                                <label class="control-label">Accuracy</label>
-                                <select name="accuracy" class="form-control form-control-sm">
-                                    <option value="DAYS">Days</option>
-                                    <option value="HOURS">Hours</option>
-                                    <option value="MINUTES">Minutes</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <input type="submit" value="Search">
-                </form>
-            </div>
-            <div class="col-6">
-                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6"></div>
-                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                    <div class="form-group">
-                        <label class="control-label">Current Price: <span id="currentPrice"></span></label>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="col" th:unless="${#lists.isEmpty(data)}">
-    <table class="table table-sm table-hover table-striped datatables table-responsive-sm table-responsive-md">
-        <thead>
-        <tr>
-            <th>A/A</th>
-            <th>Open</th>
-            <th>High</th>
-            <th>Low</th>
-            <th>Close</th>
-            <th>Date</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="d, it : ${data}">
-            <td th:text="${it.count}">IE015</td>
-            <td th:text="${d.open}">IE015</td>
-            <td th:text="${d.high}">IE015</td>
-            <td th:text="${d.low}">IE015</td>
-            <td th:text="${d.close}">IE015</td>
-            <td th:text="${d.time}">10/10/2017</td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+  </body>
 
-</body>
 </html>
