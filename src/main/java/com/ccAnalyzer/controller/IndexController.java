@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.beans.PropertyEditorSupport;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Random;
 
 @Controller
 public class IndexController {
@@ -40,5 +41,6 @@ public class IndexController {
         final Float currentPrice = service.getCurrentPrice();
         return currentPrice + "";
     }
+
 
 }
