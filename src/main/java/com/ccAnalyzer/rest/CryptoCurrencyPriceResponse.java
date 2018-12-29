@@ -14,12 +14,12 @@ import java.util.Objects;
 public class CryptoCurrencyPriceResponse {
 
     @JsonProperty("USD")
-    private Float usd;
+    private String usd;
     @JsonProperty("EUR")
-    private Float eur;
+    private String eur;
 
     @NonNull
-    public Float getPrice(){
-        return List.of(usd, eur).find(Objects::nonNull).getOrElse(0.0F);
+    public String getPrice(){
+        return List.of(usd, eur).find(Objects::nonNull).getOrElse("0");
     }
 }

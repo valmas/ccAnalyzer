@@ -1,5 +1,6 @@
 package com.ccAnalyzer;
 
+import com.ccAnalyzer.controller.AlgoController;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
 import lombok.NonNull;
@@ -7,17 +8,22 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.format.Formatter;
-import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 @SpringBootApplication
+@EnableScheduling
 public class CcAnalyzerApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CcAnalyzerApplication.class, args);
+
+		new Thread(() -> AlgoController.runAlgo(AlgoController::randomwalk, "randomwalk")).start();
+
+		new Thread(() -> AlgoController.runAlgo(AlgoController::randomwalk2, "other")).start();
 	}
 
 	@NonNull

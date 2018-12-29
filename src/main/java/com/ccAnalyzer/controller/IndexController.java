@@ -38,8 +38,7 @@ public class IndexController {
     @GetMapping(value = "/currentPrice")
     @ResponseBody
     public String currentPrice() {
-        final Float currentPrice = service.getCurrentPrice();
-        return currentPrice + "";
+        return service.getCurrentPrice();
     }
 
 

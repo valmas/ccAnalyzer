@@ -68,9 +68,9 @@ public class CryptoCurrencyRest {
                 .map(CryptoCurrencyTimeResponse::getData).getOrElse(Collections.emptyList());
     }
 
-    public Float getCurrentPrice(){
+    public String getCurrentPrice(){
         return Try.of(() -> restTemplate.getForObject(getURIPrice(), CryptoCurrencyPriceResponse.class))
-                .map(CryptoCurrencyPriceResponse::getPrice).getOrElse(0.0F);
+                .map(CryptoCurrencyPriceResponse::getPrice).getOrElse("0");
     }
 
     private static String getURIPrice() {
