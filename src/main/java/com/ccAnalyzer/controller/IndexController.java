@@ -25,7 +25,7 @@ public class IndexController {
     }
 
     @GetMapping("/historyByDate")
-    public String historyByDate(@NonNull @RequestParam LocalDate dateFrom,
+    public String history(@NonNull @RequestParam LocalDate dateFrom,
                            @NonNull @RequestParam LocalDate dateTo,
                            @NonNull @RequestParam Accuracy accuracy,
                            Model model) {
