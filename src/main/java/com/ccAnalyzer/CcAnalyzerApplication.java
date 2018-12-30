@@ -20,10 +20,6 @@ public class CcAnalyzerApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CcAnalyzerApplication.class, args);
-
-		new Thread(() -> AlgoController.runAlgo(AlgoController::randomwalk, "randomwalk")).start();
-
-		new Thread(() -> AlgoController.runAlgo(AlgoController::randomwalk2, "other")).start();
 	}
 
 	@NonNull
