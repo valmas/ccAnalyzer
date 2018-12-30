@@ -28,18 +28,18 @@ public class AlgoController implements ApplicationListener<ContextRefreshedEvent
         this.service = service;
     }
 
-    public static BigDecimal randomwalk(BigDecimal currentPrice) {
+    private static BigDecimal randomwalk(BigDecimal currentPrice) {
         Random ran = new Random();
         double u = ran.nextGaussian();
         return currentPrice.add(new BigDecimal(u).setScale(2, RoundingMode.HALF_UP));
     }
 
-    public static BigDecimal randomwalk2(BigDecimal currentPrice) {
+    private static BigDecimal randomwalk2(BigDecimal currentPrice) {
         return currentPrice.add(new BigDecimal(1));
     }
 
 
-    public static void runAlgo(Function<BigDecimal, BigDecimal> func, String name) {
+    private static void runAlgo(Function<BigDecimal, BigDecimal> func, String name) {
         BigDecimal expectedPrice = BigDecimal.ZERO;
         int index = 0;
         while(true) {
